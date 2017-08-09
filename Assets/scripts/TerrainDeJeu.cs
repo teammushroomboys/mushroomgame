@@ -5,6 +5,7 @@ using UnityEngine;
 public class TerrainDeJeu : MonoBehaviour {
 
     // Tableau de cellules
+    private Vector2 leftBottomBorder, rightTopBorder;
     private Transform[,] cells;
     private int[,] intTab =
         {
@@ -15,9 +16,9 @@ public class TerrainDeJeu : MonoBehaviour {
             {1,1,1,1,2,2,1,1,1,1},
             {1,1,1,1,2,2,2,1,1,1},
             {1,1,1,1,2,2,2,2,1,1},
-            {1,1,1,1,1,2,2,2,2,1},
-            {1,1,1,1,1,1,1,2,2,2},
-            {1,1,1,1,1,1,1,1,1,1},
+            {2,2,1,1,1,2,2,2,2,1},
+            {2,2,2,1,1,1,1,2,2,2},
+            {2,2,2,1,1,1,1,1,1,1},
  
         }
     ;
@@ -54,10 +55,24 @@ public class TerrainDeJeu : MonoBehaviour {
                         break;
                 }
                 cells[i, j].position = new Vector3(tailleCase.x * i, tailleCase.y * j, transform.position.z);
+                if (i == 0 && j == 0) {
+                    leftBottomBorder = new Vector2(cells[i, j].position.x, cells[i, j].position.y);
+                }
+                if (i == intTab.GetLength(0) && j == intTab.GetLength(1)) {
+                    rightTopBorder = new Vector2(cells[i, j].position.x, cells[i, j].position.y);
+                }
             }
         }
 
 
         return cells;
+    }
+
+    public Vector2 GetLeftBottomBorder() {
+        return leftBottomBorder;
+    }
+
+    public Vector2 GetRightTopBorder() {
+        return rightTopBorder;
     }
 }
