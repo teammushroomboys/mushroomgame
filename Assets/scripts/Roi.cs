@@ -23,10 +23,15 @@ public class Roi : MonoBehaviour {
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputY = Input.GetAxisRaw("Vertical");
 
-        movement = new Vector2(
-            Mathf.Clamp(speed.x * inputX, leftBottomBorder.x, rightTopBorder.x),
-            Mathf.Clamp(speed.x * inputX, leftBottomBorder.y, rightTopBorder.y)
-        );
+        // Mouvement du personnage
+        movement = new Vector2(speed.x * inputX, speed.y * inputY);
+
+        // Blocage sur les bords de la map
+        transform.position = new Vector3 (
+			Mathf.Clamp(transform.position.x, leftBottomBorder.x, rightTopBorder.x),
+			Mathf.Clamp(transform.position.y, leftBottomBorder.y, rightTopBorder.y),
+			transform.position.z
+		);
     }
     
     /**

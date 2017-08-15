@@ -1,78 +1,80 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class TerrainDeJeu : MonoBehaviour {
+public class TerrainDeJeu : MonoBehaviour
+{
 
-    // Tableau de cellules
+    public Sprite[] terrain;
+
     private Vector2 leftBottomBorder, rightTopBorder;
-    private Transform[,] cells;
+    private GameObject[,] cells;
+    private Vector3 tailleCase;
     private int[,] intTab =
         {
-            {1,1,2,2,1,1,1,1,1,1},
-            {1,1,1,2,1,1,1,1,1,1},
-            {1,1,1,2,2,1,1,1,1,1},
-            {1,1,1,2,2,2,1,1,1,1},
-            {1,1,1,1,2,2,1,1,1,1},
-            {1,1,1,1,2,2,2,1,1,1},
-            {1,1,1,1,2,2,2,2,1,1},
-            {2,2,1,1,1,2,2,2,2,1},
-            {2,2,2,1,1,1,1,2,2,2},
-            {2,2,2,1,1,1,1,1,1,1},
- 
+            {0,1,1,1,1,1,1,1,1,2},
+            {13,9,9,9,9,9,9,9,9,15},
+            {13,9,9,9,9,9,9,9,9,15},
+            {13,9,9,9,9,9,9,9,9,15},
+            {13,9,9,9,9,9,9,9,9,15},
+            {13,9,9,9,9,9,9,9,9,15},
+            {13,9,9,9,9,9,9,9,9,15},
+            {13,9,9,9,9,9,9,9,9,15},
+            {13,9,9,9,9,9,9,9,9,15},
+            {26,27,27,27,27,27,27,27,27,28},
+
         }
     ;
 
-    // Type de cellules
-    public Transform grassCell;
-    public Transform waterCell;
-
     // Use this for initialization
-    void Awake() {
-        cells = intTabToCells(intTab);
+    void Awake()
+    {
+        leftBottomBorder = new Vector2(0, 0);
+        rightTopBorder = new Vector2(intTab.GetLength(0) - 1, intTab.GetLength(0) - 1);
+
+        tailleCase = terrain[0].bounds.size;
+
+        intTabToCells();
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
     }
 
-    private Transform[,] intTabToCells(int[,] intTab) {
-        Transform[,] cells = new Transform[intTab.GetLength(0), intTab.GetLength(1)];
-        Vector3 tailleCase = (grassCell.GetComponent<SpriteRenderer>().bounds.size);
-        
+    private Transform[,] intTabToCells()
+    {
+        cells = new Transform[intTab.GetLength(0), intTab.GetLength(1)];
+
         for (int i = 0; i < intTab.GetLength(0); i++)
         {
             for (int j = 0; j < intTab.GetLength(1); j++)
             {
-                switch(intTab[i, j])
-                {
-                    case 1:
-                        cells[i, j] = Instantiate(grassCell) as Transform;
-                        break;
-                    case 2:
-                        cells[i, j] = Instantiate(waterCell) as Transform;
-                        break;
-                }
+                Vector3 newPosition = new Vector3(tailleCase.x * i, tailleCase.y * j, transform.position.z);
+                GameObject object = Instantiate(terrain[0]) as GameObject;
+                cells[i, j] = Instantiate(terrain[0]) as GameObject;
+            //     GameObject spellBolt;
+            //  spellBolt = Instantiate(spells[0], transform.position, transform.rotation) as GameObject;
+            //  spellBolt.transform.position = transform.position;
+
+
+                cells[i, j] = Instantiate(terrains[1]) as Transform;
                 cells[i, j].position = new Vector3(tailleCase.x * i, tailleCase.y * j, transform.position.z);
-                if (i == 0 && j == 0) {
-                    leftBottomBorder = new Vector2(cells[i, j].position.x, cells[i, j].position.y);
-                }
-                if (i == intTab.GetLength(0) && j == intTab.GetLength(1)) {
-                    rightTopBorder = new Vector2(cells[i, j].position.x, cells[i, j].position.y);
-                }
             }
         }
-
 
         return cells;
     }
 
-    public Vector2 GetLeftBottomBorder() {
+    public Vector2 GetLeftBottomBorder()
+    {
         return leftBottomBorder;
     }
 
-    public Vector2 GetRightTopBorder() {
+    public Vector2 GetRightTopBorder()
+    {
         return rightTopBorder;
     }
 }
